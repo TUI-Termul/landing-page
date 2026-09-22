@@ -1,25 +1,29 @@
+import { useState } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { SiteNav } from "./components/SiteNav";
+import { HomePage } from "./pages/HomePage";
+import { ComponentsPage } from "./pages/ComponentsPage";
+import type { ThemeId } from "./themes";
+
 export default function App() {
+  const [theme, setTheme] = useState<ThemeId>("paper");
+
   return (
-    <main className="page">
-      <header className="hero">
-        <p className="brand">Termul</p>
-        <h1>Design system for terminal UIs</h1>
-        <p className="lede">
-          Flutter TUI components — monospace-first, status at a glance, built
-          for web preview and mobile.
-        </p>
-        <div className="actions">
-          <a
-            className="btn primary"
-            href="https://github.com/TUI-Termul/termul"
-          >
-            View source
-          </a>
-          <a className="btn" href="https://github.com/TUI-Termul/docs">
-            Read docs
-          </a>
-        </div>
-      </header>
-    </main>
+    <BrowserRouter>
+      <div className="app" data-theme={theme}>
+        <div className="noise" aria-hidden="true" />
+        <SiteNav theme={theme} onThemeChange={setTheme} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomePage theme={theme} onThemeChange={setTheme} />
+            }
+          />
+          <Route path="/components" element={<ComponentsPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }

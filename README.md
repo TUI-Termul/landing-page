@@ -19,10 +19,18 @@ npm install
 npm run dev
 ```
 
+Open http://localhost:5173
+
 ```bash
 npm run build
 npm run preview
 ```
+
+## What’s on the page
+
+- **Home (`/`)** — hero, shell preview, theme switcher, component teaser
+- **Components (`/components`)** — full catalog with live previews + TOC
+- Themes recolor the whole app (`paper` / `mocha` / `phosphor` / `tokyo-night`)
 
 ## License
 
