@@ -8,8 +8,11 @@ import type { ThemeId } from "./themes";
 export default function App() {
   const [theme, setTheme] = useState<ThemeId>("paper");
 
+  // Vite `base` is `/landing-page/` on GitHub Pages; keep router in sync.
+  const basename = import.meta.env.BASE_URL.replace(/\/$/, "") || undefined;
+
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <div className="app" data-theme={theme}>
         <div className="noise" aria-hidden="true" />
         <SiteNav theme={theme} onThemeChange={setTheme} />
