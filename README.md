@@ -21,6 +21,12 @@ npm run dev
 
 Open http://localhost:5173
 
+Preview template opens the **Flutter** gallery at http://localhost:5173/termul/ — build it first:
+
+```bash
+npm run build:gallery
+```
+
 ```bash
 npm run build
 npm run preview
@@ -28,7 +34,7 @@ npm run preview
 
 ## What’s on the page
 
-- **Home (`/`)** — hero, shell preview, theme switcher, component teaser
+- **Home (`/`)** — hero, shell preview, theme switcher, component teaser. Preview links open the Flutter gallery at `/termul/` on the same host (local build or `https://tui-termul.github.io/termul/`).
 - **Components (`/components`)** — full catalog with live previews + TOC
 - Themes recolor the whole app (`paper` / `mocha` / `phosphor` / `tokyo-night`)
 

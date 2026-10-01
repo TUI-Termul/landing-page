@@ -4,6 +4,7 @@ import { Themes } from "../components/Themes";
 import { Components } from "../components/Components";
 import { Footer } from "../components/Footer";
 import type { ThemeId } from "../themes";
+import { TERMUL_GALLERY_HREF } from "../urls";
 
 type Props = {
   theme: ThemeId;
@@ -15,6 +16,10 @@ export function HomePage({ theme, onThemeChange }: Props) {
     <>
       <Hero />
       <section className="shell-stage" aria-label="Product preview">
+        <div className="shell-invite">
+          <span>template · agent shell</span>
+          <a href={TERMUL_GALLERY_HREF}>Preview template</a>
+        </div>
         <ShellPreview theme={theme} />
       </section>
       <Themes active={theme} onChange={onThemeChange} />

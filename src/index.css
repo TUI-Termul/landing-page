@@ -293,6 +293,29 @@ body {
   animation: rise 640ms cubic-bezier(0.22, 1, 0.36, 1) 320ms both;
 }
 
+.shell-invite {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem clamp(1.25rem, 4vw, 3rem);
+  border-bottom: 1px solid var(--border);
+  background: var(--sidebar);
+  color: var(--dim);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.shell-invite a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.shell-invite a:hover,
+.shell-invite a:focus-visible {
+  text-decoration: underline;
+}
+
 .shell {
   display: grid;
   grid-template-columns: minmax(10rem, 14rem) 1fr;
@@ -442,6 +465,139 @@ body {
 .line.prompt {
   margin-top: 0.35rem;
   color: var(--accent);
+}
+
+.shell button.agent,
+.shell button.tab {
+  appearance: none;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.shell button.agent {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.shell button.tab {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+}
+
+.shell button.tab.active {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+.shell button.agent:focus-visible,
+.shell button.tab:focus-visible,
+.shell-prompt input:focus-visible,
+.shell-prompt-send:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.shell-prompt {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.9rem;
+  border-top: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.shell-prompt-mark {
+  color: var(--accent);
+}
+
+.shell-prompt input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 12.5px;
+}
+
+.shell-prompt input::placeholder {
+  color: var(--dim);
+}
+
+.shell-prompt input:focus {
+  outline: none;
+}
+
+.shell-prompt-send {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 11px;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+
+.shell-prompt-send:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.app-preview {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.preview-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 1rem;
+  padding: 0.55rem clamp(1.25rem, 4vw, 3rem);
+  border-bottom: 1px solid var(--border);
+  background: var(--sidebar);
+  color: var(--dim);
+  font-size: 11px;
+}
+
+.preview-bar a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.preview-bar a:hover,
+.preview-bar a:focus-visible {
+  color: var(--accent);
+}
+
+.preview-title {
+  color: var(--text);
+}
+
+.preview-meta {
+  margin-left: auto;
+}
+
+.preview-page .shell {
+  flex: 1;
+  min-height: 22rem;
+}
+
+.preview-page .pane-body {
+  overflow: auto;
 }
 
 .cursor {
@@ -1808,7 +1964,7 @@ body {
   margin-right: 0.2rem;
 }
 
-/* TuiMagicKey */
+/* TuiMagicKey / TuiMagicKeyShape */
 .pv-magic {
   display: flex;
   flex-direction: column;
@@ -1816,10 +1972,60 @@ body {
   gap: 0.55rem;
 }
 
+.pv-magic-shapes {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1.1rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.magic-shape-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.magic-shape-label {
+  font-size: 10px;
+  color: var(--accent);
+}
+
 .magic-stage {
   position: relative;
   width: 9.5rem;
   height: 9.5rem;
+}
+
+.magic-stage-widget {
+  width: 4.5rem;
+  height: 4.5rem;
+}
+
+.magic-stage-ring {
+  width: 9rem;
+  height: 9rem;
+}
+
+.magic-stage-quarter {
+  width: 9.5rem;
+  height: 9.5rem;
+  overflow: hidden;
+}
+
+.magic-fan {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 160%;
+  height: 160%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--selection) 55%, transparent);
+  border: 1px solid var(--border);
+  transform: translate(50%, 50%);
+  pointer-events: none;
 }
 
 .magic-hub {
@@ -1837,53 +2043,43 @@ body {
   font-weight: 600;
   font-size: 14px;
   border: 1px solid var(--border);
+  z-index: 2;
+}
+
+.magic-stage-widget .magic-hub {
+  width: 2.8rem;
+  height: 2.8rem;
+  margin: -1.4rem 0 0 -1.4rem;
+  font-size: 16px;
+}
+
+.magic-hub-corner {
+  left: auto;
+  top: auto;
+  right: 0.15rem;
+  bottom: 0.15rem;
+  margin: 0;
 }
 
 .magic-petal {
   position: absolute;
-  width: 1.85rem;
-  height: 1.85rem;
-  margin: -0.925rem 0 0 -0.925rem;
+  width: 1.55rem;
+  height: 1.55rem;
+  margin: -0.775rem 0 0 -0.775rem;
   border-radius: 50%;
   background: var(--panel);
   border: 1px solid var(--border);
   display: grid;
   place-items: center;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 600;
+  z-index: 1;
 }
 
-.magic-petal.n {
-  left: 50%;
-  top: 12%;
-}
-.magic-petal.ne {
-  left: 78%;
-  top: 22%;
-}
-.magic-petal.e {
-  left: 88%;
-  top: 50%;
-}
-.magic-petal.se {
-  left: 78%;
-  top: 78%;
-}
-.magic-petal.s {
-  left: 50%;
-  top: 88%;
-}
-.magic-petal.sw {
-  left: 22%;
-  top: 78%;
-}
-.magic-petal.w {
-  left: 12%;
-  top: 50%;
-}
-.magic-petal.nw {
-  left: 22%;
-  top: 22%;
+.magic-petal.on {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
 }
 
 .magic-cap {
@@ -2346,6 +2542,10 @@ body {
 
   .shell-foot {
     display: none;
+  }
+
+  .preview-meta {
+    margin-left: 0;
   }
 
   .theme-row {

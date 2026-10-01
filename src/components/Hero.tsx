@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { TERMUL_GALLERY_HREF } from "../urls";
 
 export function Hero() {
   return (
@@ -15,7 +16,10 @@ export function Hero() {
           prompts. Web-first, ready for Android &amp; iOS.
         </p>
         <div className="actions reveal" style={{ animationDelay: "280ms" }}>
-          <Link className="btn primary" to="/components">
+          <a className="btn primary" href={TERMUL_GALLERY_HREF}>
+            Preview template
+          </a>
+          <Link className="btn" to="/components">
             Browse components
           </Link>
           <a className="btn" href="https://github.com/TUI-Termul/termul">

@@ -1,5 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import { themes, type ThemeId } from "../themes";
+import { TERMUL_GALLERY_HREF } from "../urls";
 
 type Props = {
   theme: ThemeId;
@@ -17,7 +18,7 @@ export function SiteNav({ theme, onThemeChange }: Props) {
           home
         </NavLink>
         <NavLink to="/components">components</NavLink>
-        <a href="https://github.com/TUI-Termul/docs">docs</a>
+        <a href={TERMUL_GALLERY_HREF}>preview</a>
         <a href="https://github.com/TUI-Termul/termul">github</a>
       </nav>
       <label className="theme-pick">

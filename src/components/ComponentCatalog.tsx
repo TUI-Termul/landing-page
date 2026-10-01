@@ -214,6 +214,63 @@ function PreviewDialog() {
   );
 }
 
+function PreviewEmptyState() {
+  return (
+    <div className="pv" style={{ textAlign: "center", padding: "12px 8px" }}>
+      <div className="tone-dim" style={{ fontSize: 28, lineHeight: 1 }}>
+        ⌀
+      </div>
+      <div style={{ marginTop: 10, fontWeight: 500 }}>No transfers yet</div>
+      <div className="tone-muted" style={{ marginTop: 6, fontSize: 12 }}>
+        Files you download or upload show up here.
+      </div>
+    </div>
+  );
+}
+
+function PreviewListRow() {
+  return (
+    <div className="pv" style={{ width: "100%" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: 12,
+          alignItems: "center",
+          padding: "10px 4px",
+          borderBottom: "1px solid var(--border, #c8c4bc)",
+        }}
+      >
+        <span className="tone-dim">·</span>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontWeight: 500 }}>prod-west</div>
+          <div className="tone-muted" style={{ fontSize: 11 }}>
+            deploy@10.0.0.12 · 2m
+          </div>
+        </div>
+        <span className="tone-dim">▸</span>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          gap: 12,
+          alignItems: "center",
+          padding: "10px 4px",
+          background: "var(--selection, rgba(79,70,229,0.12))",
+        }}
+      >
+        <span className="tone-accent">·</span>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontWeight: 500 }}>staging</div>
+          <div className="tone-muted" style={{ fontSize: 11 }}>
+            ops@10.0.0.40 · idle
+          </div>
+        </div>
+        <span className="tone-accent">▸</span>
+      </div>
+    </div>
+  );
+}
+
 function PreviewToast() {
   return (
     <div className="pv pv-toast-stack" aria-label="Toast stack preview">
@@ -536,19 +593,77 @@ function PreviewFileTree() {
 
 function PreviewMagicKey() {
   return (
-    <div className="pv pv-magic" aria-label="Magic key preview">
-      <div className="magic-stage">
-        <span className="magic-petal n">↑</span>
-        <span className="magic-petal ne">ESC</span>
-        <span className="magic-petal e">→</span>
-        <span className="magic-petal se">TAB</span>
-        <span className="magic-petal s">↓</span>
-        <span className="magic-petal sw">^C</span>
-        <span className="magic-petal w">←</span>
-        <span className="magic-petal nw">^D</span>
+    <div className="pv pv-magic" aria-label="TuiMagicKey preview">
+      <div className="magic-stage magic-stage-widget">
         <span className="magic-hub">⏎</span>
       </div>
-      <div className="tone-dim magic-cap">tap Enter · hold for rings · dock to edge</div>
+      <div className="tone-dim magic-cap">
+        tap Enter · hold to pick · drag / dock · idle fade
+      </div>
+    </div>
+  );
+}
+
+function PreviewMagicKeyShape() {
+  const ring = ["↑", "ESC", "→", "TAB", "↓", "^C", "←", "^D"];
+  const quarterTiers: { r: number; labels: string[] }[] = [
+    { r: 36, labels: ["↑", "←", "↓"] },
+    { r: 56, labels: ["→", "ESC", "TAB", "^C"] },
+    { r: 76, labels: ["HOME", "END", "PGUP", "PGDN", "^R"] },
+  ];
+  const start = 270;
+  const sweep = 90;
+
+  return (
+    <div className="pv pv-magic-shapes" aria-label="TuiMagicKeyShape preview">
+      <div className="magic-shape-col">
+        <div className="magic-stage magic-stage-ring">
+          {ring.map((label, i) => {
+            const deg = (360 / ring.length) * i;
+            const rad = (deg * Math.PI) / 180;
+            const r = 38;
+            const x = 50 + r * Math.sin(rad);
+            const y = 50 - r * Math.cos(rad);
+            return (
+              <span
+                key={label}
+                className="magic-petal"
+                style={{ left: `${x}%`, top: `${y}%` }}
+              >
+                {label}
+              </span>
+            );
+          })}
+          <span className="magic-hub">⏎</span>
+        </div>
+        <code className="magic-shape-label">.ring</code>
+      </div>
+      <div className="magic-shape-col">
+        <div className="magic-stage magic-stage-quarter">
+          <span className="magic-fan" aria-hidden="true" />
+          {quarterTiers.flatMap((tier, ti) => {
+            const n = tier.labels.length;
+            return tier.labels.map((label, j) => {
+              const t = n === 1 ? 0.5 : j / (n - 1);
+              const deg = start + sweep * t;
+              const rad = (deg * Math.PI) / 180;
+              const x = 100 + tier.r * Math.sin(rad);
+              const y = 100 - tier.r * Math.cos(rad);
+              return (
+                <span
+                  key={`${ti}-${label}`}
+                  className={`magic-petal${ti === 0 && j === 0 ? " on" : ""}`}
+                  style={{ left: `${x}%`, top: `${y}%` }}
+                >
+                  {label}
+                </span>
+              );
+            });
+          })}
+          <span className="magic-hub magic-hub-corner">⏎</span>
+        </div>
+        <code className="magic-shape-label">.quarter · tiers</code>
+      </div>
     </div>
   );
 }
@@ -795,8 +910,121 @@ export const catalogItems: CatalogItem[] = [
   },
   {
     name: "TuiDialog",
-    desc: "Centered confirm sheet — panel + mono labels + actions.",
+    desc: "Confirm, prompt (password/rename), and choice dialogs — mono chrome, wrapping actions.",
     preview: <PreviewDialog />,
+  },
+  {
+    name: "TuiEmptyState",
+    desc: "Empty list / empty home — mono glyph, title, body, optional CTA and accent callout.",
+    preview: <PreviewEmptyState />,
+  },
+  {
+    name: "TuiListRow",
+    desc: "Sharp list row — leading glyph, title, subtitle, trailing action. Replaces Material ListTile.",
+    preview: <PreviewListRow />,
+  },
+  {
+    name: "TuiSearchField",
+    desc: "Compact mono search / filter with prefix glyph and clear control.",
+    preview: (
+      <div className="pv pv-input">
+        <span className="prompt">/</span>
+        <span className="value">Filter hosts…</span>
+      </div>
+    ),
+  },
+  {
+    name: "TuiSegmented",
+    desc: "Contiguous exclusive segments — Password / Key / Tailscale style.",
+    preview: (
+      <div className="pv pv-row" style={{ border: "1px solid var(--border,#c8c4bc)", width: "fit-content" }}>
+        <span style={{ padding: "6px 10px", background: "var(--accent,#4f46e5)", color: "#fff", fontSize: 11 }}>PASSWORD</span>
+        <span style={{ padding: "6px 10px", fontSize: 11, borderLeft: "1px solid var(--border,#c8c4bc)" }}>KEY</span>
+        <span style={{ padding: "6px 10px", fontSize: 11, borderLeft: "1px solid var(--border,#c8c4bc)" }}>TAILSCALE</span>
+      </div>
+    ),
+  },
+  {
+    name: "TuiBanner",
+    desc: "Inline alert strip — info / warning / danger with optional actions.",
+    preview: (
+      <div className="pv" style={{ background: "rgba(234,179,8,0.18)", padding: "8px 10px", fontSize: 12, width: "100%" }}>
+        ! Unsaved edits from last time.
+      </div>
+    ),
+  },
+  {
+    name: "TuiRadio",
+    desc: "Sharp circular radio / radio group for vertical form choices.",
+    preview: (
+      <div className="pv" style={{ fontSize: 12, lineHeight: 1.8 }}>
+        <div>○ New session</div>
+        <div>● Attach tmux</div>
+      </div>
+    ),
+  },
+  {
+    name: "TuiHostCard",
+    desc: "Home host / DB card — accent title, endpoint, status, optional brand badge.",
+    preview: (
+      <div className="pv" style={{ width: "100%", textAlign: "left" }}>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <span className="tone-accent" style={{ fontSize: 18, fontWeight: 500 }}>prod-west</span>
+          <span className="tone-accent" style={{ fontSize: 11 }}>CONNECT</span>
+        </div>
+        <div className="tone-dim" style={{ fontSize: 11, marginTop: 4 }}>deploy@10.0.0.12:22</div>
+        <div className="tone-accent" style={{ fontSize: 11, marginTop: 2 }}>ACTIVE SESSION</div>
+      </div>
+    ),
+  },
+  {
+    name: "TuiCommandPalette",
+    desc: "Fuzzy ⌘K launcher — filter, groups, shortcuts, keyboard nav.",
+    preview: (
+      <div className="pv" style={{ width: "100%", textAlign: "left", fontSize: 12 }}>
+        <div className="tone-accent" style={{ fontSize: 10, letterSpacing: 0.4 }}>COMMANDS</div>
+        <div style={{ marginTop: 6 }}>❯ Connect to host</div>
+        <div className="tone-dim">Open files</div>
+      </div>
+    ),
+  },
+  {
+    name: "TuiBreadcrumbs",
+    desc: "Mono path trail — tappable segments for file browser / editor.",
+    preview: (
+      <div className="pv tone-muted" style={{ fontSize: 12 }}>
+        / <span className="tone-muted">home</span> / <span className="tone-muted">deploy</span> / <span className="tone-accent">app</span>
+      </div>
+    ),
+  },
+  {
+    name: "TuiSkeleton",
+    desc: "Pulsing sharp placeholders for list loading states.",
+    preview: (
+      <div className="pv" style={{ width: "100%" }}>
+        <div style={{ height: 10, width: "60%", background: "var(--border,#c8c4bc)", marginBottom: 8 }} />
+        <div style={{ height: 8, width: "80%", background: "var(--border,#c8c4bc)" }} />
+      </div>
+    ),
+  },
+  {
+    name: "TuiPagination",
+    desc: "Prev / next + item range caption for long result sets.",
+    preview: (
+      <div className="pv pv-row" style={{ fontSize: 12 }}>
+        <span>‹</span> <span>›</span> <span className="tone-muted">1–20 of 142</span>
+      </div>
+    ),
+  },
+  {
+    name: "TuiAccordion",
+    desc: "Expandable section — mono chevron, accent title, optional meta count.",
+    preview: (
+      <div className="pv" style={{ width: "100%", textAlign: "left", fontSize: 12 }}>
+        <div className="tone-accent">▾ TABLES <span className="tone-dim">12</span></div>
+        <div className="tone-muted" style={{ marginTop: 4, paddingLeft: 14 }}>users · orders</div>
+      </div>
+    ),
   },
   {
     name: "TuiToast",
@@ -850,8 +1078,13 @@ export const catalogItems: CatalogItem[] = [
   },
   {
     name: "TuiMagicKey",
-    desc: "Floating Enter on touch — hold for two key rings, drag to dock half-off screen, fades when idle.",
+    desc: "Floating Enter for touch terminals — tap to send, hold to pick a key, drag to move or throw to dock, fades when idle. Shape is chosen via TuiMagicKeyShape.",
     preview: <PreviewMagicKey />,
+  },
+  {
+    name: "TuiMagicKeyShape",
+    desc: "Picker geometry for TuiMagicKey — ring (compass + sub-keys) or quarter (flat keys on configurable concentric tiers).",
+    preview: <PreviewMagicKeyShape />,
   },
   {
     name: "TuiSplitView",
